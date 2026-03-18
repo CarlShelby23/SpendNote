@@ -1,22 +1,22 @@
-# 💸 SpendNote 
-### 🎓 Proyecto de Desarrollo Móvil - Universidad Veracruzana
+# SpendNote 
+### Proyecto de Desarrollo Móvil - Universidad Veracruzana
 
 **SpendNote** es una aplicación de Android moderna construida con **Kotlin** y **Jetpack Compose**, diseñada específicamente para ayudar a los estudiantes a tomar el control de sus finanzas personales de manera sencilla, rápida y visual.
 
 ---
 
-## 🚀 Características Principales
+## Características Principales
 
-* **📊 Resumen Inteligente:** Visualiza tu gasto diario y semanal de un vistazo. El contador de **"Total Hoy"** se reinicia automáticamente a las 00:00 cada día.
-* **📅 Control por Semanas:** Historial agrupado automáticamente por rangos de fechas legibles (ej. *15 Mar - 21 Mar*).
-* **✏️ Edición Dinámica:** ¿Te equivocaste en un monto? Corrige cualquier registro directamente desde el historial sin perder tus datos.
-* **🗑️ Borrado Masivo:** Mantén tu historial limpio eliminando bloques completos por semana con un solo clic.
-* **💾 Persistencia Local:** Los datos se guardan de forma segura en el dispositivo mediante formato **JSON**, garantizando rapidez y privacidad.
-* **🌙 Modo Oscuro (Dark Mode):** Interfaz optimizada con **Material Design 3**, diseñada para ser atractiva y descansar la vista en cualquier entorno.
+* **Resumen Inteligente:** Visualiza tu gasto diario y semanal de un vistazo. El contador de **"Total Hoy"** se reinicia automáticamente a las 00:00 cada día.
+* **Control por Semanas:** Historial agrupado automáticamente por rangos de fechas legibles (ej. *15 Mar - 21 Mar*).
+* ** Edición Dinámica:** ¿Te equivocaste en un monto? Corrige cualquier registro directamente desde el historial sin perder tus datos.
+* **Borrado Masivo:** Mantén tu historial limpio eliminando bloques completos por semana con un solo clic.
+* **Persistencia Local:** Los datos se guardan de forma segura en el dispositivo mediante formato **JSON**, garantizando rapidez y privacidad.
+* **Modo Oscuro (Dark Mode):** Interfaz optimizada con **Material Design 3**, diseñada para ser atractiva y descansar la vista en cualquier entorno.
 
 ---
 
-## 🛠️ Tecnologías y Herramientas
+## Tecnologías y Herramientas
 
 * **Lenguaje:** [Kotlin](https://kotlinlang.org/) 
 * **UI Framework:** [Jetpack Compose](https://developer.android.com/jetpack/compose) (Declarative UI)
@@ -26,7 +26,7 @@
 
 ---
 
-## 📱 Vista Previa de la Interfaz
+## Vista Previa de la Interfaz
 
 | Registro de Gastos | Historial por Semanas | Resumen de Totales |
 | :---: | :---: | :---: |
@@ -34,7 +34,7 @@
 
 ---
 
-## 🔧 Instalación y Uso
+## Instalación y Uso
 
 1.  **Descarga el ejecutable:** Puedes encontrar el archivo `.apk` listo para instalar en la sección de [Releases](https://github.com/CarlShelby23/Registro-de-Gastos/releases).
 2.  **Clona este repositorio:** `https://github.com/CarlShelby23/Registro-de-Gastos.git`
@@ -43,7 +43,7 @@
 
 ---
 
-## 👨‍💻 Autores
+## Autores
 * **José Carlos Amador Suárez**
 * **Ernesto Rafael Díaz Caraza**
 * **Alvaro Mendoza Prado**
