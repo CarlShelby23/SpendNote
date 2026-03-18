@@ -9,7 +9,7 @@
 
 * **Resumen Inteligente:** Visualiza tu gasto diario y semanal de un vistazo. El contador de **"Total Hoy"** se reinicia automáticamente a las 00:00 cada día.
 * **Control por Semanas:** Historial agrupado automáticamente por rangos de fechas legibles (ej. *15 Mar - 21 Mar*).
-* ** Edición Dinámica:** ¿Te equivocaste en un monto? Corrige cualquier registro directamente desde el historial sin perder tus datos.
+* **Edición Dinámica:** ¿Te equivocaste en un monto? Corrige cualquier registro directamente desde el historial sin perder tus datos.
 * **Borrado Masivo:** Mantén tu historial limpio eliminando bloques completos por semana con un solo clic.
 * **Persistencia Local:** Los datos se guardan de forma segura en el dispositivo mediante formato **JSON**, garantizando rapidez y privacidad.
 * **Modo Oscuro (Dark Mode):** Interfaz optimizada con **Material Design 3**, diseñada para ser atractiva y descansar la vista en cualquier entorno.
