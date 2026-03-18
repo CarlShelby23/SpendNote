@@ -38,7 +38,7 @@ Una aplicación de Android moderna construida con **Kotlin** y **Jetpack Compose
 ## 🔧 Instalación y Uso
 
 1.  Clona este repositorio:  
-    ``
+    `https://github.com/CarlShelby23/Registro-de-Gastos.git`
 2.  Abre el proyecto en **Android Studio (Ladybug o superior)**.
 3.  Sincroniza el proyecto con los archivos de Gradle.
 4.  Ejecuta la app en un emulador o dispositivo físico con **Android 8.0 (API 26)** o superior.
