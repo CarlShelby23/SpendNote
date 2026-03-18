@@ -50,7 +50,7 @@ Una aplicación de Android moderna construida con **Kotlin** y **Jetpack Compose
 * **Ernesto Rafael Díaz Caraza**
 * **Alvaro Mendoza Prado**
 
-*Estudiantes de la carrera de Ingeniería en Sistemas y Tecnologías de la Información - **Universidad Veracruzana** Xalapa, Veracruz, México.*
+Estudiantes de la carrera de Ingeniería en Sistemas y Tecnologías de la Información - **Universidad Veracruzana** Xalapa, Veracruz, México.
 
 ---
 *Este proyecto fue desarrollado bajo los lineamientos de la experiencia educativa: Desarrollo Móvil.*
