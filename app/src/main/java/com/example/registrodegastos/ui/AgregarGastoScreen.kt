@@ -21,8 +21,9 @@ fun AgregarGastoScreen(
 ) {
     var cantidad by remember { mutableStateOf("") }
     var categoriaSeleccionada by remember { mutableStateOf("") }
+    var otraCategoria by remember { mutableStateOf("") }
     var expandido by remember { mutableStateOf(false) }
-    val categorias = listOf("Café", "Transporte", "Cine", "Snacks", "Otros")
+    val categorias = listOf("Café", "Transporte", "Cine", "Snacks", "Despensa", "Pago de Servicios", "Otros")
 
     Scaffold(
         topBar = {
@@ -43,7 +44,7 @@ fun AgregarGastoScreen(
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            // Sección Cantidad
+
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(text = "Cantidad", fontWeight = FontWeight.Bold)
                 OutlinedTextField(
@@ -56,7 +57,6 @@ fun AgregarGastoScreen(
                 )
             }
 
-            // Sección Categoría
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(text = "Categoría", fontWeight = FontWeight.Bold)
                 ExposedDropdownMenuBox(
@@ -89,16 +89,34 @@ fun AgregarGastoScreen(
                 }
             }
 
+
+            if (categoriaSeleccionada == "Otros") {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(text = "Descripción de la categoría", fontWeight = FontWeight.Bold)
+                    OutlinedTextField(
+                        value = otraCategoria,
+                        onValueChange = { otraCategoria = it },
+                        placeholder = { Text("Ej. Entretenimiento, Ropa...") },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true
+                    )
+                }
+            }
+
             Spacer(modifier = Modifier.weight(1f))
 
-            // Botón Guardar
             Button(
-                onClick = { onGuardarClick(cantidad, categoriaSeleccionada) },
+                onClick = {
+                    val categoriaFinal = if (categoriaSeleccionada == "Otros") otraCategoria else categoriaSeleccionada
+                    onGuardarClick(cantidad, categoriaFinal)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
                 shape = MaterialTheme.shapes.small,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
+                enabled = cantidad.isNotEmpty() && categoriaSeleccionada.isNotEmpty() &&
+                        (categoriaSeleccionada != "Otros" || otraCategoria.isNotEmpty())
             ) {
                 Text("GUARDAR GASTO", fontWeight = FontWeight.Bold)
             }
@@ -118,11 +136,10 @@ fun AgregarGastoScreenPreview() {
 @Preview(showBackground = true)
 @Composable
 fun HistorialScreenPreview() {
-    // Lista falsa solo para ver el diseño
     val gastosFalsos = listOf(
-        Gasto(id = "1", monto = 50.0, categoria = "Café", fecha = "17/03/2026"),
-        Gasto(id = "2", monto = 20.0, categoria = "Transporte", fecha = "17/03/2026"),
-        Gasto(id = "3", monto = 100.0, categoria = "Cine", fecha = "17/03/2026")
+        Gasto(id = "1", monto = 50.0, categoria = "Café", fecha = System.currentTimeMillis()),
+        Gasto(id = "2", monto = 20.0, categoria = "Transporte", fecha = System.currentTimeMillis()),
+        Gasto(id = "3", monto = 100.0, categoria = "Cine", fecha = System.currentTimeMillis())
     )
 
     HistorialScreen(

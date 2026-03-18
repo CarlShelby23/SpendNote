@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.filled.Delete
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,7 +39,6 @@ fun ResumenScreen(
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
-            // Tarjeta Total de hoy
             OutlinedCard(
                 modifier = Modifier.fillMaxWidth(),
                 border = BorderStroke(1.dp, Color.Black)
@@ -55,7 +55,6 @@ fun ResumenScreen(
                 }
             }
 
-            // Tarjeta Total de la semana
             OutlinedCard(
                 modifier = Modifier.fillMaxWidth(),
                 border = BorderStroke(1.dp, Color.Black)
@@ -83,4 +82,24 @@ fun ResumenScreenPreview() {
         totalSemana = "680.00",
         onBackClick = {}
     )
+}
+@Composable
+fun TarjetaSemana(semana: Int, total: Double, onBorrar: () -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text("Semana #$semana", style = MaterialTheme.typography.titleMedium)
+                Text("Total: $$total", color = MaterialTheme.colorScheme.primary)
+            }
+            IconButton(onClick = onBorrar) {
+                Icon(Icons.Default.Delete, contentDescription = "Borrar", tint = Color.Red)
+            }
+        }
+    }
 }

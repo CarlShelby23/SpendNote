@@ -74,13 +74,14 @@ fun AppPrincipal() {
                     onGuardarClick = { montoString, categoria ->
                         val nuevoMonto = montoString.toDoubleOrNull() ?: 0.0
                         val fechaActual = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-                        
+
                         val nuevoGasto = Gasto(
                             id = System.currentTimeMillis().toString(),
                             monto = nuevoMonto,
                             categoria = categoria,
-                            fecha = fechaActual
+                            fecha = System.currentTimeMillis()
                         )
+
                         val nuevaLista = listaGastos + nuevoGasto
                         listaGastos = nuevaLista
                         fileManager.guardarGastos(context, nuevaLista)

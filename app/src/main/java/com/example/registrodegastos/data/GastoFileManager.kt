@@ -35,4 +35,22 @@ class GastoFileManager {
             emptyList()
         }
     }
+
+    fun obtenerGastosAgrupadosPorSemana(gastos: List<Gasto>): Map<Int, List<Gasto>> {
+        val calendar = java.util.Calendar.getInstance()
+        return gastos.groupBy {
+            calendar.timeInMillis = it.fecha
+            calendar.get(java.util.Calendar.WEEK_OF_YEAR)
+        }
+    }
+
+    fun borrarSemana(context: Context, semana: Int, listaCompleta: List<Gasto>): List<Gasto> {
+        val calendar = java.util.Calendar.getInstance()
+        val nuevaLista = listaCompleta.filter {
+            calendar.timeInMillis = it.fecha
+            calendar.get(java.util.Calendar.WEEK_OF_YEAR) != semana
+        }
+        guardarGastos(context, nuevaLista)
+        return nuevaLista
+    }
 }
