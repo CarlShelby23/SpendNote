@@ -18,9 +18,7 @@ import com.example.registrodegastos.ui.AgregarGastoScreen
 import com.example.registrodegastos.ui.HistorialScreen
 import com.example.registrodegastos.ui.ResumenScreen
 import com.example.registrodegastos.ui.theme.RegistroDeGastosTheme
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.Calendar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,11 +34,12 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppPrincipal() {
     var pantallaActual by remember { mutableStateOf("Agregar") }
+    var gastoAEditar by remember { mutableStateOf<Gasto?>(null) }
     val context = LocalContext.current
-    val fileManager = remember { GastoFileManager() }
     var listaGastos by remember { mutableStateOf(listOf<Gasto>()) }
+
     LaunchedEffect(Unit) {
-        listaGastos = fileManager.leerGastos(context)
+        listaGastos = GastoFileManager.obtenerGastos(context)
     }
 
     Scaffold(
@@ -50,7 +49,10 @@ fun AppPrincipal() {
                     icon = { Icon(Icons.Default.Add, contentDescription = "Agregar") },
                     label = { Text("Agregar") },
                     selected = pantallaActual == "Agregar",
-                    onClick = { pantallaActual = "Agregar" }
+                    onClick = {
+                        gastoAEditar = null
+                        pantallaActual = "Agregar"
+                    }
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = "Historial") },
@@ -70,35 +72,55 @@ fun AppPrincipal() {
         Surface(modifier = Modifier.padding(paddingValues)) {
             when (pantallaActual) {
                 "Agregar" -> AgregarGastoScreen(
-                    onCerrarClick = {},
-                    onGuardarClick = { montoString, categoria ->
+                    gastoAEditar = gastoAEditar,
+                    onCerrarClick = {
+                        gastoAEditar = null
+                        pantallaActual = "Historial"
+                    },
+                    onGuardarClick = { montoString, categoria, idExistente ->
                         val nuevoMonto = montoString.toDoubleOrNull() ?: 0.0
-                        val fechaActual = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-
-                        val nuevoGasto = Gasto(
-                            id = System.currentTimeMillis().toString(),
-                            monto = nuevoMonto,
-                            categoria = categoria,
-                            fecha = System.currentTimeMillis()
-                        )
-
-                        val nuevaLista = listaGastos + nuevoGasto
-                        listaGastos = nuevaLista
-                        fileManager.guardarGastos(context, nuevaLista)
+                        if (idExistente == null) {
+                            val nuevoGasto = Gasto(monto = nuevoMonto, categoria = categoria)
+                            listaGastos = listaGastos + nuevoGasto
+                        } else {
+                            listaGastos = listaGastos.map {
+                                if (it.id == idExistente) it.copy(monto = nuevoMonto, categoria = categoria) else it
+                            }
+                        }
+                        GastoFileManager.guardarGastos(context, listaGastos)
+                        gastoAEditar = null
                         pantallaActual = "Historial"
                     }
                 )
                 "Historial" -> HistorialScreen(
                     gastos = listaGastos,
-                    onBackClick = { pantallaActual = "Agregar" }
+                    onDeleteSemana = { fechaEnSemana ->
+                        listaGastos = GastoFileManager.eliminarSemana(context, listaGastos, fechaEnSemana)
+                    },
+                    onEditGasto = { gasto ->
+                        gastoAEditar = gasto
+                        pantallaActual = "Agregar"
+                    }
                 )
                 "Resumen" -> {
-                    val totalGasto = listaGastos.sumOf { it.monto }
-                    
+                    val hoy = System.currentTimeMillis()
+                    val calHoy = Calendar.getInstance().apply { timeInMillis = hoy }
+                    val totalHoy = listaGastos.filter {
+                        val calGasto = Calendar.getInstance().apply { timeInMillis = it.fecha }
+                        calGasto.get(Calendar.YEAR) == calHoy.get(Calendar.YEAR) &&
+                                calGasto.get(Calendar.DAY_OF_YEAR) == calHoy.get(Calendar.DAY_OF_YEAR)
+                    }.sumOf { it.monto }
+
+                    val semanaActual = calHoy.get(Calendar.WEEK_OF_YEAR)
+                    val totalSemana = listaGastos.filter {
+                        val calGasto = Calendar.getInstance().apply { timeInMillis = it.fecha }
+                        calGasto.get(Calendar.YEAR) == calHoy.get(Calendar.YEAR) &&
+                                calGasto.get(Calendar.WEEK_OF_YEAR) == semanaActual
+                    }.sumOf { it.monto }
+
                     ResumenScreen(
-                        totalHoy = totalGasto.toString(),
-                        totalSemana = "0.00",
-                        onBackClick = { pantallaActual = "Historial" }
+                        totalHoy = String.format("%.2f", totalHoy),
+                        totalSemana = String.format("%.2f", totalSemana)
                     )
                 }
             }

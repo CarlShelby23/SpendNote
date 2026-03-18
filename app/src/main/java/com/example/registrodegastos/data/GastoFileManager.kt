@@ -4,51 +4,44 @@ import android.content.Context
 import com.example.registrodegastos.model.Gasto
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.util.ArrayList
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
-class GastoFileManager {
+object GastoFileManager {
+    private const val FILE_NAME = "gastos.json"
 
-    companion object {
-        private const val FILE_NAME = "gastos.json"
-    }
-
-    private val gson = Gson()
-
-    fun guardarGastos(context: Context, gastos: List<Gasto>) {
-        val json = gson.toJson(gastos)
-        try {
-            context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE).use { fos ->
-                fos.write(json.toByteArray())
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
+    fun guardarGastos(context: Context, lista: List<Gasto>) {
+        val json = Gson().toJson(lista)
+        context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE).use {
+            it.write(json.toByteArray())
         }
     }
 
-    fun leerGastos(context: Context): List<Gasto> {
-        return try {
-            val jsonText = context.openFileInput(FILE_NAME).bufferedReader().use { it.readText() }
-            val type = object : TypeToken<ArrayList<Gasto>>() {}.type
-            gson.fromJson(jsonText, type) ?: emptyList()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emptyList()
-        }
+    fun obtenerGastos(context: Context): List<Gasto> {
+        val file = File(context.filesDir, FILE_NAME)
+        if (!file.exists()) return emptyList()
+        return Gson().fromJson(file.readText(), object : TypeToken<List<Gasto>>() {}.type)
     }
 
-    fun obtenerGastosAgrupadosPorSemana(gastos: List<Gasto>): Map<Int, List<Gasto>> {
-        val calendar = java.util.Calendar.getInstance()
-        return gastos.groupBy {
-            calendar.timeInMillis = it.fecha
-            calendar.get(java.util.Calendar.WEEK_OF_YEAR)
-        }
+    fun formatearFecha(timestamp: Long): String =
+        SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(timestamp))
+
+    fun obtenerRangoSemana(timestamp: Long): String {
+        val cal = Calendar.getInstance().apply { timeInMillis = timestamp }
+        cal.set(Calendar.DAY_OF_WEEK, cal.firstDayOfWeek)
+        val inicio = SimpleDateFormat("dd MMM", Locale.getDefault()).format(cal.time)
+        cal.add(Calendar.DAY_OF_WEEK, 6)
+        val fin = SimpleDateFormat("dd MMM", Locale.getDefault()).format(cal.time)
+        return "$inicio - $fin"
     }
 
-    fun borrarSemana(context: Context, semana: Int, listaCompleta: List<Gasto>): List<Gasto> {
-        val calendar = java.util.Calendar.getInstance()
-        val nuevaLista = listaCompleta.filter {
-            calendar.timeInMillis = it.fecha
-            calendar.get(java.util.Calendar.WEEK_OF_YEAR) != semana
+    fun eliminarSemana(context: Context, gastos: List<Gasto>, fechaEnSemana: Long): List<Gasto> {
+        val calBusqueda = Calendar.getInstance().apply { timeInMillis = fechaEnSemana }
+        val semanaBusqueda = calBusqueda.get(Calendar.WEEK_OF_YEAR)
+        val nuevaLista = gastos.filter {
+            val calGasto = Calendar.getInstance().apply { timeInMillis = it.fecha }
+            calGasto.get(Calendar.WEEK_OF_YEAR) != semanaBusqueda
         }
         guardarGastos(context, nuevaLista)
         return nuevaLista
